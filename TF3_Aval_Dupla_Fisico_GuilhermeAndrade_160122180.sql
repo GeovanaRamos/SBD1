@@ -1,0 +1,92 @@
+CREATE TABLE PACIENTE (
+    ses INT(14)  PRIMARY KEY,
+    nome VARCHAR(255)  NOT NULL,
+    dataNascimento DATE  NOT NULL,
+    rg INT(7)  NOT NULL,
+    numero INT(3)  NOT NULL,
+    rua VARCHAR(60)  NOT NULL,
+    bairro VARCHAR(60)  NOT NULL,
+    cidade VARCHAR(60)  NOT NULL,
+    estado VARCHAR(60)  NOT NULL,
+);
+
+CREATE TABLE FARMACEUTICO (
+    cpf INT(11) NOT NULL,
+    dataNascimento DATE  NOT NULL,
+    crf INT(5)  PRIMARY KEY,
+    nomeCompleto VARCHAR(255)  NOT NULL,
+);
+
+CREATE TABLE PRODUTO (
+    codigoBarras int(13) PRIMARY KEY,
+    nome VARCHAR(255)  NOT NULL
+);
+
+CREATE TABLE MEDICAMENTO (
+    portaria INT(4)  NOT NULL,
+    codigoBarras int(13) PRIMARY KEY,
+    CONSTRAINT FK_MEDICAMENTO_PRODUTO
+       FOREIGN KEY (codigoBarras)
+       REFERENCES PRODUTO (codigoBarras)
+       ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE retira (
+    codDistribuicao INT(8) PRIMARY KEY,
+    quantidadeSolicitada INT(4)  NOT NULL,
+    quantidadeFornecida INT(4)  NOT NULL,
+    dataHora DATETIME  NOT NULL,
+    codigoBarras INT(13)  NOT NULL,
+    crf INT(5)  NOT NULL,
+    CONSTRAINT FK_retira_PRODUTO
+        FOREIGN KEY (codigoBarras)
+        REFERENCES PRODUTO (codigoBarras)
+        ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT FK_retira_FARMACEUTICO
+        FOREIGN KEY (crf)
+        REFERENCES FARMACEUTICO (crf),
+        ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+CREATE TABLE RECEITA (
+    codReceita INT(8) PRIMARY KEY,
+    dataHora DATETIME  NOT NULL,
+    crm VARCHAR(10)  NOT NULL,
+    nomeMedico VARCHAR(50) NOT NULL,
+    ses INT(14)  NOT NULL,
+    crf INT(5)  NOT NULL,
+   CONSTRAINT FK_RECEITA_PACIENTE
+       FOREIGN KEY (ses)
+       REFERENCES PACIENTE (ses)
+       ON DELETE RESTRICT ON UPDATE RESTRICT,
+   CONSTRAINT FK_RECEITA_FARMACEUTICO
+       FOREIGN KEY (crf)
+       REFERENCES FARMACEUTICO (crf)
+       ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+CREATE TABLE RECEITASIMPLES (
+    codReceita INT(8) PRIMARY KEY,
+    CONSTRAINT FK_RECEITASIMPLES_RECEITA
+       FOREIGN KEY (codReceita)
+       REFERENCES RECEITA (codReceita)
+       ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+CREATE TABLE RECEITAESPECIAL (
+    codReceita INT(8) PRIMARY KEY,
+    lista ENUM('A1', 'A2', 'A3', 'B1', 'B2', 'C1', 'C2', 'C3', 'C4', 'C5')
+    CONSTRAINT FK_RECEITAESPECIAL_RECEITA
+        FOREIGN KEY (codReceita)
+        REFERENCES RECEITA (codReceita)
+        ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+CREATE TABLE telefones (
+    ses INT(14)  NOT NULL,
+    telefones INT(11)  NOT NULL,
+    CONSTRAINT FK_RECEITA_atende_3
+        FOREIGN KEY (ses)
+        REFERENCES PACIENTE (ses)
+        ON DELETE RESTRICT ON UPDATE RESTRICT
+);
