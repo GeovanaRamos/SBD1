@@ -3,13 +3,14 @@
 --                    SCRIPT DE CRIACAO (DDL)                                            --
 --                                                                                       --
 -- Data Criacao ..........: 26/11/2018                                                   --
--- Autor(es) .............: Geovana Silva, Sara Silva, Eduardo	                         --
+-- Autor(es) .............: Geovana Silva, Sara Silva, Eduardo Lima                      --
 -- Banco de Dados ........: MySQL                                                        --
 -- Base de Dados(nome) ...: farmacia                                                     --
 --                                                                                       --
 -- Data Ultima Alteracao ..: 26/11/2018                                                  --
---    + Criacao nova tabela pescreve
---    + adição de alguns atributos                                                       --
+--    + Criação nova tabela prescreve
+--    + Adição de alguns atributos
+--    + Criação nova tabela ESTOQUE_MEDICAMENTO
 --                                                                                       --
 -- PROJETO => 1 Base de Dados                                                            --
 --         => 10 Tabelas                                                                 --
@@ -54,6 +55,17 @@ CREATE TABLE MEDICAMENTO (
        ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE ESTOQUE_PRODUTO (
+    idProduto INT PRIMARY KEY,
+    codigoBarras INT(13),
+    quantidade INT,
+
+    CONSTRAINT FK_PRODUTO
+    	FOREIGN KEY (codigoBarras)
+	REFERENCES PRODUTO (codigoBarras)
+	ON DELETE RESTRICT ON UPDATE RESTRICT,
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE retira (
     codDistribuicao INT(8) PRIMARY KEY AUTO_INCREMENT,
     quantidadeSolicitada INT(4)  NOT NULL,
@@ -61,9 +73,9 @@ CREATE TABLE retira (
     dataHora DATETIME  NOT NULL,
     codigoBarras INT(13)  NOT NULL,
     crf INT(5)  NOT NULL,
-    CONSTRAINT FK_retira_PRODUTO
+    CONSTRAINT FK_retira_ESTOQUE_PRODUTO
         FOREIGN KEY (codigoBarras)
-        REFERENCES PRODUTO (codigoBarras)
+        REFERENCES ESTOQUE_PRODUTO (codigoBarras)
         ON DELETE RESTRICT ON UPDATE RESTRICT,
     CONSTRAINT FK_retira_FARMACEUTICO
         FOREIGN KEY (crf)
@@ -110,7 +122,7 @@ CREATE TABLE RECEITAESPECIAL (
         ON DELETE RESTRICT ON UPDATE RESTRICT
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE pescreve(
+CREATE TABLE prescreve(
     codReceita INT(8) NOT NULL,
     codigoBarras int(13) NOT NULL,
     dose VARCHAR(255) NOT NULL,
