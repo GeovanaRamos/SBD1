@@ -1,3 +1,25 @@
+-- --------            << TRABALHO FINAL - TEMA 2 >>                        ------------ --
+--                                                                                       --
+--                    SCRIPT DE CRIACAO (DDL)                                            --
+--                                                                                       --
+-- Data Criacao ..........: 26/11/2018                                                   --
+-- Autor(es) .............: Geovana Silva, Sara Silva, Eduardo	                         --
+-- Banco de Dados ........: MySQL                                                        --
+-- Base de Dados(nome) ...: farmacia                                                     --
+--                                                                                       --
+-- Data Ultima Alteracao ..: 26/11/2018                                                  --
+--    + Criacao nova tabela pescreve
+--    + adição de alguns atributos                                                       --
+--                                                                                       --
+-- PROJETO => 1 Base de Dados                                                            --
+--         => 10 Tabelas                                                                 --
+--                                                                                       --
+-- -----------------------------------------------------------------                     --
+
+create database if not exists farmacia;
+
+use farmacia;
+
 CREATE TABLE PACIENTE (
     ses INT(14)  PRIMARY KEY,
     nome VARCHAR(255)  NOT NULL,
@@ -7,20 +29,21 @@ CREATE TABLE PACIENTE (
     rua VARCHAR(60)  NOT NULL,
     bairro VARCHAR(60)  NOT NULL,
     cidade VARCHAR(60)  NOT NULL,
-    estado VARCHAR(60)  NOT NULL,
-);
+    estado VARCHAR(60)  NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE FARMACEUTICO (
     cpf INT(11) NOT NULL,
     dataNascimento DATE  NOT NULL,
     crf INT(5)  PRIMARY KEY,
-    nomeCompleto VARCHAR(255)  NOT NULL,
-);
+    nomeCompleto VARCHAR(255)  NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE PRODUTO (
     codigoBarras int(13) PRIMARY KEY,
-    nome VARCHAR(255)  NOT NULL
-);
+    nome VARCHAR(255)  NOT NULL,
+	tipoFarmacia varchar(20) NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE MEDICAMENTO (
     portaria INT(4)  NOT NULL,
@@ -29,10 +52,10 @@ CREATE TABLE MEDICAMENTO (
        FOREIGN KEY (codigoBarras)
        REFERENCES PRODUTO (codigoBarras)
        ON DELETE CASCADE ON UPDATE CASCADE
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE retira (
-    codDistribuicao INT(8) PRIMARY KEY,
+    codDistribuicao INT(8) PRIMARY KEY AUTO_INCREMENT,
     quantidadeSolicitada INT(4)  NOT NULL,
     quantidadeFornecida INT(4)  NOT NULL,
     dataHora DATETIME  NOT NULL,
@@ -44,12 +67,12 @@ CREATE TABLE retira (
         ON DELETE RESTRICT ON UPDATE RESTRICT,
     CONSTRAINT FK_retira_FARMACEUTICO
         FOREIGN KEY (crf)
-        REFERENCES FARMACEUTICO (crf),
+        REFERENCES FARMACEUTICO (crf)
         ON DELETE RESTRICT ON UPDATE RESTRICT
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 1;
 
 CREATE TABLE RECEITA (
-    codReceita INT(8) PRIMARY KEY,
+    codReceita INT(8) PRIMARY KEY AUTO_INCREMENT,
     dataHora DATETIME  NOT NULL,
     crm VARCHAR(10)  NOT NULL,
     nomeMedico VARCHAR(50) NOT NULL,
@@ -63,7 +86,7 @@ CREATE TABLE RECEITA (
        FOREIGN KEY (crf)
        REFERENCES FARMACEUTICO (crf)
        ON DELETE RESTRICT ON UPDATE RESTRICT
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 1;
 
 CREATE TABLE RECEITASIMPLES (
     codReceita INT(8) PRIMARY KEY,
@@ -71,16 +94,37 @@ CREATE TABLE RECEITASIMPLES (
        FOREIGN KEY (codReceita)
        REFERENCES RECEITA (codReceita)
        ON DELETE RESTRICT ON UPDATE RESTRICT
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE RECEITAESPECIAL (
     codReceita INT(8) PRIMARY KEY,
-    lista ENUM('A1', 'A2', 'A3', 'B1', 'B2', 'C1', 'C2', 'C3', 'C4', 'C5')
+    lista ENUM('A1', 'A2', 'A3', 'B1', 'B2', 'C1', 'C2', 'C3', 'C4', 'C5'),
+    codigoBarras int(13) NOT NULL,
     CONSTRAINT FK_RECEITAESPECIAL_RECEITA
         FOREIGN KEY (codReceita)
         REFERENCES RECEITA (codReceita)
+        ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT FK_RECEITAESPECIAL_MEDICAMENTO
+        FOREIGN KEY (codigoBarras)
+        REFERENCES MEDICAMENTO (codigoBarras)
         ON DELETE RESTRICT ON UPDATE RESTRICT
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE pescreve(
+    codReceita INT(8) NOT NULL,
+    codigoBarras int(13) NOT NULL,
+    dose VARCHAR(255) NOT NULL,
+    frequencia VARCHAR(255) NOT NULL,
+	duração VARCHAR(255) NOT NULL,
+    CONSTRAINT FK_prescreve_RECEITASIMPLES
+        FOREIGN KEY (codReceita)
+        REFERENCES RECEITASIMPLES (codReceita)
+        ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT FK_prescreve_MEDICAMENTO
+        FOREIGN KEY (codigoBarras)
+        REFERENCES MEDICAMENTO (codigoBarras)
+        ON DELETE RESTRICT ON UPDATE RESTRICT
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE telefones (
     ses INT(14)  NOT NULL,
@@ -89,4 +133,4 @@ CREATE TABLE telefones (
         FOREIGN KEY (ses)
         REFERENCES PACIENTE (ses)
         ON DELETE RESTRICT ON UPDATE RESTRICT
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
