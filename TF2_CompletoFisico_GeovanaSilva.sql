@@ -7,7 +7,7 @@
 -- Banco de Dados ........: MySQL                                    --
 -- Base de Dados(nome) ...: TF2                                      --
 --                                                                   --
--- Data Ultima Alteracao ..: 03/12/2018                              --
+-- Data Ultima Alteracao ..: 04/12/2018                              --
 --    + Atualização de tabelas                                       --
 --                                                                   --
 -- PROJETO => 1 Base de Dados                                        --
@@ -54,13 +54,13 @@ CREATE TABLE PACIENTE (
 
 -- --------- Estoque -------- --
 CREATE TABLE TIPOMEDICAMENTO (
-    idTipoMedicamento INT PRIMARY KEY,
+    idTipoMedicamento INT PRIMARY KEY AUTO_INCREMENT,
     principioAtivo VARCHAR(50) NOT NULL,
     portaria INT NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE MEDICAMENTO (
-    idMedicamento INT PRIMARY KEY,
+    idMedicamento INT PRIMARY KEY AUTO_INCREMENT,
     idTipoMedicamento INT NOT NULL,
     laboratorio VARCHAR(50) NOT NULL,
     CONSTRAINT FK_MEDICAMENTO_TIPOMEDICAMENTO
@@ -70,7 +70,7 @@ CREATE TABLE MEDICAMENTO (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE ESTOQUEMEDICAMENTO (
-    idEstoqueMedicamento INT PRIMARY KEY,
+    idEstoqueMedicamento INT PRIMARY KEY AUTO_INCREMENT,
     tipoFarmacia ENUM('Interna', 'Externa')  NOT NULL,
     quantidade INT NOT NULL,
     idMedicamento INT NOT NULL,
@@ -82,11 +82,11 @@ CREATE TABLE ESTOQUEMEDICAMENTO (
 
 CREATE TABLE INSUMO (
     nome VARCHAR(50) NOT NULL,
-    idInsumo INT PRIMARY KEY
+    idInsumo INT PRIMARY KEY AUTO_INCREMENT
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE ESTOQUEINSUMO (
-    idEstoqueInsumo INT PRIMARY KEY,
+    idEstoqueInsumo INT PRIMARY KEY AUTO_INCREMENT,
     quantidade INT NOT NULL,
     idInsumo INT NOT NULL,
     CONSTRAINT FK_ESTOQUEINSUMO_INSUMO
@@ -97,7 +97,7 @@ CREATE TABLE ESTOQUEINSUMO (
 
 -- --------- Pedidos ------- --
 CREATE TABLE PEDIDO (
-    idPedido INT PRIMARY KEY,
+    idPedido INT PRIMARY KEY AUTO_INCREMENT,
     quantidade INT NOT NULL,
     data DATE NOT NULL,
     matricula INT NOT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE PEDIDO (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE PEDIDOINSUMO (
-    idPedido INT PRIMARY KEY,
+    idPedido INT PRIMARY KEY AUTO_INCREMENT,
     idInsumo INT NOT NULL,
     CONSTRAINT FK_PEDIDOINSUMO_PEDIDO
         FOREIGN KEY (idPedido)
@@ -121,7 +121,7 @@ CREATE TABLE PEDIDOINSUMO (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE PEDIDOMEDICAMENTO (
-    idPedido INT PRIMARY KEY,
+    idPedido INT PRIMARY KEY AUTO_INCREMENT,
     idTipoMedicamento INT NOT NULL,
     CONSTRAINT FK_PEDIDOMEDICAMENTO_PEDIDO
         FOREIGN KEY (idPedido)
@@ -136,7 +136,7 @@ CREATE TABLE PEDIDOMEDICAMENTO (
 -- --------- Receitas ------- --
 CREATE TABLE RECEITA (
     crm INT NOT NULL,
-    idReceita INT PRIMARY KEY,
+    idReceita INT PRIMARY KEY AUTO_INCREMENT,
     nomeMedico VARCHAR(50) NOT NULL,
     dataEmissao DATE NOT NULL,
     dataRecebimento DATE NOT NULL,
@@ -173,7 +173,7 @@ CREATE TABLE RECEITAESPECIAL (
 
 CREATE TABLE PRESCRICAO (
     quantidade INT NOT NULL,
-    idPrescricao INT PRIMARY KEY,
+    idPrescricao INT PRIMARY KEY AUTO_INCREMENT,
     idTipoMedicamento INT NOT NULL,
     idReceita INT NOT NULL,
     posologia VARCHAR(50) NOT NULL,
@@ -208,11 +208,11 @@ CREATE TABLE telefonefuncionario (
 
 -- --------- Atendimento ------- --
 CREATE TABLE ATENDIMENTO (
-    data INT NOT NULL,
+    data DATE NOT NULL,
     dataRetorno DATE NOT NULL,
     matricula INT NOT NULL,
     ses INT NOT NULL,
-    idAtendimento INT PRIMARY KEY,
+    idAtendimento INT PRIMARY KEY AUTO_INCREMENT,
     CONSTRAINT FK_ATENDIMENTO_FUNCIONARIO
         FOREIGN KEY (matricula)
         REFERENCES FUNCIONARIO (matricula)
