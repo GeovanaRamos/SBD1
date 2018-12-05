@@ -7,8 +7,8 @@
 -- Banco de Dados ........: MySQL                                    --
 -- Base de Dados(nome) ...: TF2                                      --
 --                                                                   --
--- Data Ultima Alteracao ..: 04/12/2018                              --
---    + Criação dos selects                                          --
+-- Data Ultima Alteracao ..: 05/12/2018                              --
+--    + Criação da view e mudança de nome de colunas                 --
 --                                                                   --
 -- PROJETO => 1 Base de Dados                                        --
 --         => 21 Tabelas                                             --

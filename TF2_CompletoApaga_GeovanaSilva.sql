@@ -7,8 +7,8 @@
 -- Banco de Dados ........: MySQL                                    --
 -- Base de Dados(nome) ...: TF2                                      --
 --                                                                   --
--- Data Ultima Alteracao ..: 04/12/2018                              --
---    + Criação dos drops                                            --
+-- Data Ultima Alteracao ..: 05/12/2018                              --
+--    + Criação dos drops da view e user                             --
 --                                                                   --
 -- PROJETO => 1 Base de Dados                                        --
 --         => 21 Tabelas                                             --
