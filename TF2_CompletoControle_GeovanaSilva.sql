@@ -15,6 +15,6 @@
 --                                                                   --
 -- ----------------------------------------------------------------- --
 
-CREATE USER admin2
+CREATE USER if not exists 'admin2'
 	IDENTIFIED BY 'senhaadmin';
 	GRANT ALL PRIVILEGES ON TF2.* TO admin2;

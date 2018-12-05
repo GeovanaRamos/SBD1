@@ -209,7 +209,7 @@ CREATE TABLE telefonefuncionario (
 -- --------- Atendimento ------- --
 CREATE TABLE ATENDIMENTO (
     data DATE NOT NULL,
-    dataRetorno DATE NOT NULL,
+    dataRetorno DATE,
     matricula INT NOT NULL,
     ses INT NOT NULL,
     idAtendimento INT PRIMARY KEY AUTO_INCREMENT,
